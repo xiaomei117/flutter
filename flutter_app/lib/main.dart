@@ -39,18 +39,6 @@ class ImageAndIconRoute extends StatefulWidget {
 }
 
 class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
-  Timer sec;
-
-  void startCountdownTimer() {
-    const oneSec = const Duration(seconds: 1);
-    var callback = (timer) => {setState(() {})};
-
-    sec = Timer.periodic(oneSec, callback);
-  }
-
-  void initState() {
-    startCountdownTimer();
-  }
 
   @override
   Widget build(BuildContext context) {

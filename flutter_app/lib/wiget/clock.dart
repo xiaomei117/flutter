@@ -1,22 +1,57 @@
 
 
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Clock extends StatelessWidget{
-  Widget build(BuildContext context) {
-    int countdownhour = 0;
-    int countdownmin = 0;
-    int countdownsec = 0;
-    var today = DateTime.now();
-    DateTime require_time=new DateTime(2021,1,19,12);
-    int time_remaining=today.millisecondsSinceEpoch-require_time.millisecondsSinceEpoch;
-    int time_seconds=time_remaining~/1000;
+class Clock extends StatefulWidget {
+  @override
+  _ClockState createState() => _ClockState();
+}
 
-    countdownhour = time_seconds~/3600;
-    countdownmin = (time_seconds-countdownhour*3600)~/60;
-    countdownsec = time_seconds%60;
+class _ClockState extends State<Clock> {
+
+  Timer sec;
+  int timeSeconds;
+
+  void startCountdownTimer() {
+    const oneSec = const Duration(seconds: 1);
+    var callback = (timer) => {
+      setState(() {}),
+      if(timeSeconds >= 3600*24 - 1) sec.cancel()
+    };
+
+    sec = Timer.periodic(oneSec, callback);
+  }
+
+  void initState() {
+    super.initState();
+    startCountdownTimer();
+  }
+
+  void dispose(){
+    sec.cancel();
+    super.dispose();
+  }
+
+
+
+  Widget build(BuildContext context) {
+
+    int countdownHour = 0;
+    int countdownMin = 0;
+    int countdownSec = 0;
+
+    var today = DateTime.now();
+    DateTime requireTime=new DateTime(2021,1,20,12);
+    int timeRemaining=today.millisecondsSinceEpoch-requireTime.millisecondsSinceEpoch;
+    timeSeconds=timeRemaining~/1000;
+
+    countdownHour = timeSeconds~/3600;
+    countdownMin = (timeSeconds-countdownHour*3600)~/60;
+    countdownSec = timeSeconds%60;
 
     return Row(
         children: [
@@ -67,7 +102,7 @@ class Clock extends StatelessWidget{
                 Align(
                     alignment: Alignment.center,
                     child: Text(
-                      '${countdownhour}',
+                      '${countdownHour}',
                       style: TextStyle(
                         color: Color.fromARGB(255, 83, 19, 152),
                       ),
@@ -123,7 +158,7 @@ class Clock extends StatelessWidget{
                 Align(
                     alignment: Alignment.center,
                     child: Text(
-                      '${countdownmin}',
+                      '${countdownMin}',
                       style: TextStyle(
                         color: Color.fromARGB(255, 83, 19, 152),
                       ),
@@ -179,7 +214,7 @@ class Clock extends StatelessWidget{
                 Align(
                     alignment: Alignment.center,
                     child: Text(
-                      '${countdownsec}',
+                      '${countdownSec}',
                       style: TextStyle(
                         color: Color.fromARGB(255, 83, 19, 152),
                       ),
@@ -192,4 +227,8 @@ class Clock extends StatelessWidget{
     );
 
   }
+
+
+
+
 }
