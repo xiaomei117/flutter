@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/wiget/clock.dart';
+import 'package:flutter_app/widget/cardsevice.dart';
+import 'package:flutter_app/widget/clock.dart';
+import 'package:flutter_app/widget/rowstar.dart';
 
 import 'SecondScreen.dart';
-import 'wiget/card.dart';
+import 'widget/card.dart';
 
 void main() => runApp(new MyApp());
 
@@ -141,7 +143,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
         padding: EdgeInsets.fromLTRB(16, 0, 15, 0),
         crossAxisSpacing: 16,
         crossAxisCount: 2,
-        children: [CardInitial(), CardInitial()],
+        children: [CardInitial(indexOfStar: 10,), CardInitial(indexOfStar: 11,)]
       ),
     );
   }
@@ -155,7 +157,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
         padding: EdgeInsets.fromLTRB(16, 0, 15, 0),
         crossAxisSpacing: 16,
         crossAxisCount: 2,
-        children: [CardInitial(), CardInitial(), CardInitial(), CardInitial()],
+        children: [CardInitial(indexOfStar: 5,), CardInitial(indexOfStar: 6,), CardInitial(indexOfStar: 7,), CardInitial(indexOfStar: 8,),],
       ),
     );
   }
@@ -623,11 +625,11 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
         scrollDirection: Axis.horizontal,
         children: [
           SizedBox(width: 17),
-          CardInitial(),
+          CardInitial(indexOfStar: 0,),
           SizedBox(width: 10),
-          CardInitial(),
+          CardInitial(indexOfStar: 1,),
           SizedBox(width: 10),
-          CardInitial()
+          CardInitial(indexOfStar: 2,),
         ],
       ),
     );
