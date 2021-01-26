@@ -52,7 +52,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
       thirdRow(),
       forthCard(),
       rencentView(),
-      stars(),
+      RowStars(),
       stackCard(),
       staffPick(),
       gridView1(),
