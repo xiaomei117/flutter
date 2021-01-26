@@ -4,64 +4,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/StarList.dart';
 import 'package:flutter_app/widget/cardsevice.dart';
 
-class CardInitial extends StatefulWidget {
-
+class CardInitial extends StatelessWidget {
   final int indexOfStar;
-  CardInitial({this.indexOfStar});
-  @override
-  _CardInitialState createState() => _CardInitialState();
-}
-
-class _CardInitialState extends State<CardInitial> {
- 
   final CardSevice info = CardSevice.cardData;
-  String imageNet='';
-
-  Future<String> imageReceive() async {
-    List<Star> value = await info.receiveInfo();
-    imageNet=value[widget.indexOfStar].avatar;
-    return imageNet;
-  }
+  CardInitial({this.indexOfStar});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: imageReceive(),
-      initialData: '',
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        if(imageNet == '') return Container(
+      future: info.receiveInfo(),
+      initialData: [],
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.data.length != 0) {
+          String imageNet = snapshot.data[indexOfStar].avatar;
+          String nameOfStar = snapshot.data[indexOfStar].name;
+          String bioOfStar = snapshot.data[indexOfStar].bio;
+          return Container(
             margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
             height: 210,
             width: 150.0,
-            child:Text('loading...')
-        );
-        else return Container(
-          margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
-          height: 210,
-          width: 150.0,
-          child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            //第一行组件
-            buildContainer1(),
-            //第二行组件
-            buildContainer2(),
-            //第三行组件
-            buildContainer3()
-          ]),
-
-          decoration: ShapeDecoration(
-            //设置背景图片
-            image: new DecorationImage(
-                image: NetworkImage(imageNet),
-                fit: BoxFit.cover),
-            shape: RoundedRectangleBorder(
-              //设置圆角
-                borderRadius: BorderRadiusDirectional.circular(10)),
-          ),
-        );
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //第一行组件
+                  buildContainer1(),
+                  //第二行组件
+                  buildContainer2(nameOfStar),
+                  //第三行组件
+                  buildContainer3(bioOfStar)
+                ]),
+            decoration: ShapeDecoration(
+              //设置背景图片
+              image: new DecorationImage(
+                  image: NetworkImage(imageNet), fit: BoxFit.cover),
+              shape: RoundedRectangleBorder(
+                  //设置圆角
+                  borderRadius: BorderRadiusDirectional.circular(10)),
+            ),
+          );
+        } else
+          return Container(
+              margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
+              height: 210,
+              width: 150.0,
+              child: Text(''));
       },
     );
-
   }
 
 //卡片第一行
@@ -94,7 +83,7 @@ class _CardInitialState extends State<CardInitial> {
   }
 
 //卡片第二行
-  Container buildContainer2() {
+  Container buildContainer2(String name) {
     return Container(
       height: 15,
       child: Row(children: [
@@ -105,25 +94,25 @@ class _CardInitialState extends State<CardInitial> {
           width: 95,
           alignment: Alignment.topCenter,
           child: FutureBuilder(
-            future: info.receiveInfo(),
-            initialData: [],
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if(snapshot.connectionState==ConnectionState.done&&snapshot.data.length!=0) {
-                return Text(
-                  snapshot.data[widget.indexOfStar].name,
-                  textAlign: TextAlign.left, //文本对齐方式：左对齐
-                  overflow: TextOverflow.ellipsis, //省略方式：省略号
-                  maxLines: 1,
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      color: Color.fromRGBO(255, 255, 255, 0.9),
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic),
-                );
-              }
-              else return Text('');
-            }
-          ),
+              future: info.receiveInfo(),
+              initialData: [],
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.data.length != 0) {
+                  return Text(
+                    name,
+                    textAlign: TextAlign.left, //文本对齐方式：左对齐
+                    overflow: TextOverflow.ellipsis, //省略方式：省略号
+                    maxLines: 1,
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Color.fromRGBO(255, 255, 255, 0.9),
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.italic),
+                  );
+                } else
+                  return Text('');
+              }),
         ),
 
         //第二行右边图片上加文字
@@ -152,7 +141,7 @@ class _CardInitialState extends State<CardInitial> {
   }
 
 //卡片第三行
-  Container buildContainer3() {
+  Container buildContainer3(String bio) {
     return Container(
       height: 15,
       child: Row(children: [
@@ -161,14 +150,14 @@ class _CardInitialState extends State<CardInitial> {
         ),
         Expanded(
             child: Container(
-          child:
-          FutureBuilder(
+          child: FutureBuilder(
               future: info.receiveInfo(),
               initialData: [],
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if(snapshot.connectionState==ConnectionState.done&&snapshot.data.length!=0) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.data.length != 0) {
                   return Text(
-                    snapshot.data[widget.indexOfStar].bio,
+                    bio,
                     textAlign: TextAlign.left, //文本对齐方式：左对齐
                     overflow: TextOverflow.ellipsis, //省略方式：省略号
                     maxLines: 1,
@@ -177,11 +166,9 @@ class _CardInitialState extends State<CardInitial> {
                         color: Color.fromRGBO(255, 255, 255, 0.7),
                         fontWeight: FontWeight.w700),
                   );
-                }
-                else return Text('');
-              }
-          ),
-
+                } else
+                  return Text('');
+              }),
         )),
         SizedBox(width: 10),
         Container(
