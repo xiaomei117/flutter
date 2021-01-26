@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/StarList.dart';
 import 'package:flutter_app/widget/cardsevice.dart';
 
-class CardInitial extends StatelessWidget {
+class CardInitial extends StatefulWidget {
   final int indexOfStar;
-  final CardSevice info = CardSevice.cardData;
   CardInitial({this.indexOfStar});
+  @override
+  _CardInitialState createState() => _CardInitialState();
+}
+
+class _CardInitialState extends State<CardInitial> {
+  final CardSevice info = CardSevice.cardData;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +22,11 @@ class CardInitial extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.data.length != 0) {
-          String imageNet = snapshot.data[indexOfStar].avatar;
-          String nameOfStar = snapshot.data[indexOfStar].name;
-          String bioOfStar = snapshot.data[indexOfStar].bio;
+          String imageNet = snapshot.data[widget.indexOfStar].avatar;
+          String nameOfStar = snapshot.data[widget.indexOfStar].name;
+          String bioOfStar = snapshot.data[widget.indexOfStar].bio;
           return Container(
-            margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
+            margin: EdgeInsets.fromLTRB(0, 13, 15, 0),
             height: 210,
             width: 150.0,
             child: Column(
@@ -48,7 +53,7 @@ class CardInitial extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
               height: 210,
               width: 150.0,
-              child: Text(''));
+              child: Text('123'));
       },
     );
   }
