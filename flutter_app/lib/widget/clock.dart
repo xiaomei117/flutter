@@ -20,7 +20,7 @@ class _ClockState extends State<Clock> {
     const oneSec = const Duration(seconds: 1);
     var callback = (timer) => {
       setState(() {}),
-      if(timeSeconds >= 3600*24 - 1) sec.cancel()
+     // if(timeSeconds >= 3600*24 - 1) sec.cancel()
     };
 
     sec = Timer.periodic(oneSec, callback);
@@ -39,7 +39,6 @@ class _ClockState extends State<Clock> {
 
 
   Widget build(BuildContext context) {
-
     int countdownHour = 0;
     int countdownMin = 0;
     int countdownSec = 0;
@@ -49,8 +48,8 @@ class _ClockState extends State<Clock> {
     int timeRemaining=today.millisecondsSinceEpoch-requireTime.millisecondsSinceEpoch;
     timeSeconds=timeRemaining~/1000;
 
-    countdownHour = timeSeconds~/3600;
-    countdownMin = (timeSeconds-countdownHour*3600)~/60;
+    countdownHour = (timeSeconds~/3600)%24;
+    countdownMin = (timeSeconds-(timeSeconds~/3600)*3600)~/60;
     countdownSec = timeSeconds%60;
 
     return Row(
