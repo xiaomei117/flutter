@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/StarList.dart';
+import 'package:flutter_app/models/star.dart';
 import 'package:flutter_app/widget/cardsevice.dart';
+import 'package:flutter_app/widget/starsinfo.dart';
 
 class CardInitial extends StatefulWidget {
   final int indexOfStar;
@@ -16,45 +17,53 @@ class _CardInitialState extends State<CardInitial> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: info.receiveInfo(),
-      initialData: [],
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.data.length != 0) {
-          String imageNet = snapshot.data[widget.indexOfStar].avatar;
-          String nameOfStar = snapshot.data[widget.indexOfStar].name;
-          String bioOfStar = snapshot.data[widget.indexOfStar].bio;
-          return Container(
-            margin: EdgeInsets.fromLTRB(0, 13, 15, 0),
-            height: 210,
-            width: 150.0,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  //第一行组件
-                  buildContainer1(),
-                  //第二行组件
-                  buildContainer2(nameOfStar),
-                  //第三行组件
-                  buildContainer3(bioOfStar)
-                ]),
-            decoration: ShapeDecoration(
-              //设置背景图片
-              image: new DecorationImage(
-                  image: NetworkImage(imageNet), fit: BoxFit.cover),
-              shape: RoundedRectangleBorder(
-                  //设置圆角
-                  borderRadius: BorderRadiusDirectional.circular(10)),
-            ),
-          );
-        } else
-          return Container(
-              margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => new StarsInfo(starIndex: widget.indexOfStar)),
+        );
+      },
+      child: FutureBuilder(
+        future: info.receiveInfo(),
+        initialData: [],
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.data.length != 0) {
+            String imageNet = snapshot.data[widget.indexOfStar].avatar;
+            String nameOfStar = snapshot.data[widget.indexOfStar].name;
+            String bioOfStar = snapshot.data[widget.indexOfStar].bio;
+            return Container(
+              margin: EdgeInsets.fromLTRB(0, 13, 15, 0),
               height: 210,
               width: 150.0,
-              child: Text('123'));
-      },
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    //第一行组件
+                    buildContainer1(),
+                    //第二行组件
+                    buildContainer2(nameOfStar),
+                    //第三行组件
+                    buildContainer3(bioOfStar)
+                  ]),
+              decoration: ShapeDecoration(
+                //设置背景图片
+                image: new DecorationImage(
+                    image: NetworkImage(imageNet), fit: BoxFit.cover),
+                shape: RoundedRectangleBorder(
+                    //设置圆角
+                    borderRadius: BorderRadiusDirectional.circular(10)),
+              ),
+            );
+          } else
+            return Container(
+                margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
+                height: 210,
+                width: 150.0,
+                child: Text('123'));
+        },
+      ),
     );
   }
 

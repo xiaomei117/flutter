@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/models/StarList.dart';
+import 'package:flutter_app/models/star.dart';
 
 class CardSevice {
   static final CardSevice cardData = CardSevice._privateConstructor();
