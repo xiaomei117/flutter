@@ -1,15 +1,28 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_app/models/star.dart';
 import 'package:flutter_app/widget/strings.dart';
-
+import '../ImageAndIconRoute.dart';
 import 'cardsevice.dart';
-
-class StarsInfo extends StatelessWidget {
+import 'eventbus.dart';
+import 'fileio.dart';
+import 'package:event_bus/event_bus.dart';
+class StarsInfo extends StatefulWidget {
+  @override
   final int starIndex;
-  final CardSevice info = CardSevice.cardData;
-
   StarsInfo({this.starIndex});
+  _StarsInfoState createState() => _StarsInfoState();
+}
+
+class _StarsInfoState extends State<StarsInfo> {
+  final CardSevice info = CardSevice.cardData;
+  TextEditingController name=TextEditingController();
+  String currentStr='';//用户修改的神婆名字
+
+
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -29,6 +42,7 @@ class StarsInfo extends StatelessWidget {
               icon: Icon(Icons.arrow_back_ios,
                   color: Color.fromRGBO(94, 22, 172, 0.98)),
               onPressed: () {
+                eventBus.fire(EventParam(this.currentStr));
                 Navigator.pop(context);
               }),
         ),
@@ -38,14 +52,15 @@ class StarsInfo extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.data.length != 0) {
-                String imageNet = snapshot.data[starIndex].avatar;
-                String nameOfStar = snapshot.data[starIndex].name;
-                String bioOfStar = snapshot.data[starIndex].bio;
-                int avlSer = snapshot.data[starIndex].availableService.length;
-                return Column(
+                String imageNet = snapshot.data[widget.starIndex].avatar;
+                String nameOfStar = snapshot.data[widget.starIndex].name;
+                String bioOfStar = snapshot.data[widget.starIndex].bio;
+                int avlSer = snapshot.data[widget.starIndex].availableService.length;
+
+                return ListView(
                   children: [
-                    mainInfo(imageNet, nameOfStar, bioOfStar),
-                    servOfStar(avlSer, snapshot)
+                    mainInfo(imageNet, nameOfStar, bioOfStar,snapshot),
+                    servOfStar(avlSer, snapshot),
                   ],
                 );
               } else
@@ -61,9 +76,9 @@ class StarsInfo extends StatelessWidget {
           itemExtent: 52,
           itemBuilder: (BuildContext context, int index) {
             int typeOfStar =
-                snapshot.data[starIndex].availableService[index].type;
+                snapshot.data[widget.starIndex].availableService[index].type;
             double priceOfSer =
-                snapshot.data[starIndex].availableService[index].price;
+                snapshot.data[widget.starIndex].availableService[index].price;
             bool tos=false;
             String danwei='/min';
             if(typeOfStar<=3) tos=true;
@@ -138,7 +153,7 @@ class StarsInfo extends StatelessWidget {
                 );
   }
 
-  Container mainInfo(String imageNet, String nameOfStar, String bioOfStar) {
+  Container mainInfo(String imageNet, String nameOfStar, String bioOfStar, AsyncSnapshot<dynamic> snapshot) {
     return Container(
       height: 200,
       alignment: Alignment.bottomCenter,
@@ -158,23 +173,71 @@ class StarsInfo extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8),
-          Container(
-            height: 57,
-            child: Column(
-              children: [
-                Text(nameOfStar,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(41, 17, 73, 1))),
-                Text(bioOfStar,
-                    style: TextStyle(
-                        fontSize: 12, color: Color.fromRGBO(153, 153, 153, 1)))
-              ],
-            ),
-          )
+          starsName(nameOfStar, bioOfStar,snapshot)
         ],
       ),
     );
   }
+
+  Container starsName(String nameOfStar, String bioOfStar, AsyncSnapshot snapshot) {
+
+    return Container(
+          height: 67,
+          width: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 200,
+                height: 30,
+                child: TextField(
+                    controller: this.name=TextEditingController.fromValue(
+                        TextEditingValue(
+                            text: nameOfStar,
+                            selection: TextSelection.fromPosition(
+                              ///用来设置文本的位置
+                              TextPosition(
+                                  affinity: TextAffinity.downstream,
+                                  /// 光标向后移动的长度
+                                  offset: nameOfStar.length-1),)
+                        )
+                    ),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(41, 17, 73, 1)),
+                  focusNode: FocusNode(),
+
+                  decoration: InputDecoration(
+                    isCollapsed: true,
+                    ),
+
+                  onChanged: (value){
+                      this.currentStr=value;
+                  },
+
+                  onSubmitted: (value){
+                    _upDataName(snapshot);
+                   },
+                  inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                ),
+              ),
+              Text(bioOfStar,overflow: TextOverflow.ellipsis,style: TextStyle(
+                  fontSize: 12, color: Color.fromRGBO(153, 153, 153, 1)))
+            ],
+          ),
+        );
+  }
+
+
+  Future<Null> _upDataName(AsyncSnapshot snapshot) async {
+
+
+    List<Star> newStarList = new List<Star>();
+    newStarList.addAll(snapshot.data);
+    newStarList[widget.starIndex].name=this.currentStr;
+
+    await (await FileMaterial().getLocalFile()).writeAsString(json.encode(newStarList));
+  }
+
 }

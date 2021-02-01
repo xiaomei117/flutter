@@ -4,7 +4,13 @@ import 'package:flutter_app/models/star.dart';
 
 import 'cardsevice.dart';
 
-class RowStars extends StatelessWidget {
+class RowStars extends StatefulWidget {
+  @override
+  _RowStarsState createState() => _RowStarsState();
+}
+
+class _RowStarsState extends State<RowStars> {
+
   final CardSevice info = CardSevice.cardData;
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter_app/models/star.dart';
+
+import 'fileio.dart';
 
 class CardSevice {
   static final CardSevice cardData = CardSevice._privateConstructor();
@@ -8,7 +9,7 @@ class CardSevice {
 
   Future<List<Star>> receiveInfo() async{
      List<Star> starDataList = new List<Star>();
-     return rootBundle.loadString("data/starList.json").then((value) {
+     return FileMaterial().read().then((value) {
       List<dynamic> myData = new List<dynamic>();
       myData = jsonDecode(value);
       starDataList.addAll(myData.map((e) => Star.fromJson(e)).toList());
