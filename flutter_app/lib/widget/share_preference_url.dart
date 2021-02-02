@@ -7,6 +7,8 @@ class SharePreference{
   static Future<SharedPreferences> prefs= SharedPreferences.getInstance();
   static List<String> listID = [];
 
+  static const String KEY_RECENT_VIEWED_LIST = 'RecentViewed';
+
   writeList(String key,String value) async{
     for(int i=0;i<listID.length;i++){
       if(listID[i] == value) listID.remove(value);
@@ -17,8 +19,8 @@ class SharePreference{
   }
   Future<List> readList() async{
     return await prefs.then((v) {
-      if(v.getStringList('RecentViewed')!=null) {
-        return v.getStringList('RecentViewed');
+      if(v.getStringList(KEY_RECENT_VIEWED_LIST)!=null) {
+        return v.getStringList(KEY_RECENT_VIEWED_LIST);
       }
       else return[];
     } );
