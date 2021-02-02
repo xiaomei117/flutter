@@ -25,13 +25,13 @@ class ImageAndIconRoute extends StatefulWidget {
 
 class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
   StreamSubscription _subscription;
-  ListStarInfo listOfStar=ListStarInfo.starData;
+  ListStarInfo listOfStar = ListStarInfo.starData;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //监听登录事件
-    _subscription=eventBus.on<EventParam>().listen((EventParam data) =>
+    _subscription = eventBus.on<EventParam>().listen((EventParam data) =>
         update()
     );
     _subscription.resume();
