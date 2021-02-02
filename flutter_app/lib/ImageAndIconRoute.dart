@@ -2,16 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/widget/bigcard.dart';
+import 'package:flutter_app/widget/big_card.dart';
+import 'package:flutter_app/widget/card_sevice.dart';
 import 'package:flutter_app/widget/clock.dart';
-import 'package:flutter_app/widget/eventbus.dart';
-import 'package:flutter_app/widget/rowstar.dart';
+import 'package:flutter_app/widget/event_bus.dart';
+import 'package:flutter_app/widget/list_starinfo.dart';
+import 'package:flutter_app/widget/recent_star.dart';
 import 'package:event_bus/event_bus.dart';
-import 'package:flutter_app/widget/starsinfo.dart';
+import 'package:flutter_app/widget/share_preference_url.dart';
+import 'package:flutter_app/widget/stars_info.dart';
 import 'SecondScreen.dart';
+import 'models/star.dart';
 import 'widget/card.dart';
 
 class ImageAndIconRoute extends StatefulWidget {
+  
   @override
   _ImageAndIconRouteState createState() {
     return _ImageAndIconRouteState();
@@ -20,19 +25,21 @@ class ImageAndIconRoute extends StatefulWidget {
 
 class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
   StreamSubscription _subscription;
-
+  ListStarInfo listOfStar=ListStarInfo.starData;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //监听登录事件
     _subscription=eventBus.on<EventParam>().listen((EventParam data) =>
-         upData()
+        update()
     );
     _subscription.resume();
+    loadInfo();
+    initPre();
   }
 
-  void upData(){
+  void update(){
     setState((){
 
     });
@@ -42,8 +49,22 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     _subscription.cancel();
     super.dispose();
   }
+  initPre() async{
+    SharePreference starID = SharePreference.starPer;
+    await starID.readList().then((value) => SharePreference.listID);
+  }
+
+  loadInfo() async{
+    CardSevice cardCP= CardSevice.cardData;
+    await cardCP.receiveInfo().then((value) => listOfStar.receiveInfo(value));
+    setState((){
+
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
+
     // TODO: implement build
     return Center(
         child: ListView(children: [
@@ -51,17 +72,26 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
           secondRow(),
           thirdRow(),
           forthCard(),
-          rencentView(),
           RowStars(),
-          BigCard(indexOfStar: 1),
+          bigCard(),
           staffPick(),
-          gridView(4),
+          gridView(6),
           Live(),
-          gridView(7),
+          gridView(4),
           News(),
-          gridView(9),
+          gridView(2),
           advisorButton(context)
-        ]));
+        ])
+    );
+  }
+
+  Widget bigCard() {
+    Star starOfBigCard = new Star();
+    if(ListStarInfo.listOfStar.isNotEmpty) {
+      starOfBigCard = ListStarInfo.listOfStar[1];
+      return BigCard(star: starOfBigCard);
+    }
+    else return Text('');
   }
 
   Widget advisorButton(BuildContext context) {
@@ -134,23 +164,28 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     );
   }
 
-  Container gridView(int str) {
-    return Container(
-      height: 450,
-      child:
-      GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: 4,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.84
-        ),
-        padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
-        itemBuilder: (context,index){
-          return CardInitial(indexOfStar: index+str);
-        },
-      ),
-    );
+  Widget gridView(int str) {
+    if(ListStarInfo.listOfStar.isEmpty) {
+      return Text('');
+    }
+    else {
+      return GridView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: str,
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              crossAxisCount: 2,
+              childAspectRatio: 0.84
+          ),
+          padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
+          itemBuilder: (context,index) {
+            Star star = ListStarInfo.listOfStar[index];
+            return CardInitial(star: star);
+          }
+      );
+    }
   }
 
   Container staffPick() {
@@ -172,39 +207,24 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     );
   }
 
-//这是recentview
-  Container rencentView() {
-    return Container(
-      height: 45,
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        children: [
-          SizedBox(width: 18),
-          Image.asset('images/recentVTag.png'),
-          SizedBox(width: 8),
-          Text('Recent Viewed',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Color.fromARGB(255, 194, 73, 255),
-              )),
-        ],
-      ),
-    );
-  }
-
 //这是神婆小卡片
-  Container forthCard() {
-    return Container(
-      height: 220,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 5,
-          padding: EdgeInsets.fromLTRB(17, 0, 0, 0),
-          itemBuilder: (context, index) {
-            return CardInitial(indexOfStar: index);
-          }
-      ),
-    );
+  Widget forthCard() {
+    if(ListStarInfo.listOfStar.isEmpty) {
+      return Text('');
+    }
+    else {
+      return Container(
+        height: 220,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 16,
+            padding: EdgeInsets.fromLTRB(17, 0, 0, 0),
+            itemBuilder: (context, index) {
+              Star star = ListStarInfo.listOfStar[index];
+              return CardInitial(star: star);}
+        ),
+      );
+    }
   }
 
 //这是best match

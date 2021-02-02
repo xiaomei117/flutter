@@ -152,7 +152,7 @@
   "accuracy": 0.990539,
   "accuracyCount": 3,
   "rate": 5,
-  "liveStatus": 0,
+  "liveStatus": 1,
   "workStatus": 1,
   "firstApprovedAt": 1603088955000,
   "featureCover": ""

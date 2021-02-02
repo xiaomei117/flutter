@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'availableservice.dart';
+part of 'available_service.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

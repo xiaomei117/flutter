@@ -1,4 +1,4 @@
-import 'package:flutter_app/models/availableservice.dart';
+import 'package:flutter_app/models/available_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'star.g.dart';
 

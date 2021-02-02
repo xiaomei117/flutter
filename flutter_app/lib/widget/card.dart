@@ -2,67 +2,52 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/star.dart';
-import 'package:flutter_app/widget/cardsevice.dart';
-import 'package:flutter_app/widget/starsinfo.dart';
+import 'package:flutter_app/widget/card_sevice.dart';
+import 'package:flutter_app/widget/share_preference_url.dart';
+import 'package:flutter_app/widget/stars_info.dart';
 
 class CardInitial extends StatefulWidget {
-  final int indexOfStar;
-  CardInitial({this.indexOfStar});
+  final Star star;
+  CardInitial({this.star});
   @override
   _CardInitialState createState() => _CardInitialState();
 }
 
 class _CardInitialState extends State<CardInitial> {
-  final CardSevice info = CardSevice.cardData;
+  SharePreference starID = SharePreference.starPer;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
+        starID.writeList('RecentViewed',widget.star.userId);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => new StarsInfo(starIndex: widget.indexOfStar)),
+          MaterialPageRoute(
+              builder: (context) => new StarsInfo(star: widget.star)),
         );
       },
-      child: FutureBuilder(
-        future: info.receiveInfo(),
-        initialData: [],
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.data.length != 0) {
-            String imageNet = snapshot.data[widget.indexOfStar].avatar;
-            String nameOfStar = snapshot.data[widget.indexOfStar].name;
-            String bioOfStar = snapshot.data[widget.indexOfStar].bio;
-            return Container(
-              margin: EdgeInsets.fromLTRB(0, 13, 15, 0),
-              height: 210,
-              width: 150.0,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    //第一行组件
-                    buildContainer1(),
-                    //第二行组件
-                    buildContainer2(nameOfStar),
-                    //第三行组件
-                    buildContainer3(bioOfStar)
-                  ]),
-              decoration: ShapeDecoration(
-                //设置背景图片
-                image: new DecorationImage(
-                    image: NetworkImage(imageNet), fit: BoxFit.cover),
-                shape: RoundedRectangleBorder(
-                    //设置圆角
-                    borderRadius: BorderRadiusDirectional.circular(10)),
-              ),
-            );
-          } else
-            return Container(
-                margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
-                height: 210,
-                width: 150.0,
-                child: Text('123'));
-        },
+      child: Container(
+        margin: EdgeInsets.fromLTRB(0, 13, 15, 0),
+        height: 210,
+        width: 150.0,
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          //第一行组件
+          buildContainer1(),
+          //第二行组件
+          buildContainer2(widget.star.name),
+          //第三行组件
+          buildContainer3(widget.star.bio)
+        ]),
+        decoration: ShapeDecoration(
+          //设置背景图片
+          image: new DecorationImage(
+              image: NetworkImage(widget.star.avatar), fit: BoxFit.cover),
+          shape: RoundedRectangleBorder(
+              //设置圆角
+              borderRadius: BorderRadiusDirectional.circular(10)),
+        ),
       ),
     );
   }
@@ -107,26 +92,17 @@ class _CardInitialState extends State<CardInitial> {
           height: 13,
           width: 95,
           alignment: Alignment.topCenter,
-          child: FutureBuilder(
-              future: info.receiveInfo(),
-              initialData: [],
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.data.length != 0) {
-                  return Text(
-                    name,
-                    textAlign: TextAlign.left, //文本对齐方式：左对齐
-                    overflow: TextOverflow.ellipsis, //省略方式：省略号
-                    maxLines: 1,
-                    style: TextStyle(
-                        fontSize: 14.0,
-                        color: Color.fromRGBO(255, 255, 255, 0.9),
-                        fontWeight: FontWeight.w500,
-                        fontStyle: FontStyle.italic),
-                  );
-                } else
-                  return Text('');
-              }),
+          child: Text(
+            name,
+            textAlign: TextAlign.left, //文本对齐方式：左对齐
+            overflow: TextOverflow.ellipsis, //省略方式：省略号
+            maxLines: 1,
+            style: TextStyle(
+                fontSize: 14.0,
+                color: Color.fromRGBO(255, 255, 255, 0.9),
+                fontWeight: FontWeight.w500,
+                fontStyle: FontStyle.italic),
+          )
         ),
 
         //第二行右边图片上加文字
@@ -163,27 +139,16 @@ class _CardInitialState extends State<CardInitial> {
           width: 10,
         ),
         Expanded(
-            child: Container(
-          child: FutureBuilder(
-              future: info.receiveInfo(),
-              initialData: [],
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.data.length != 0) {
-                  return Text(
-                    bio,
-                    textAlign: TextAlign.left, //文本对齐方式：左对齐
-                    overflow: TextOverflow.ellipsis, //省略方式：省略号
-                    maxLines: 1,
-                    style: TextStyle(
-                        fontSize: 12.0,
-                        color: Color.fromRGBO(255, 255, 255, 0.7),
-                        fontWeight: FontWeight.w700),
-                  );
-                } else
-                  return Text('');
-              }),
-        )),
+            child: Text(
+              bio,
+              textAlign: TextAlign.left, //文本对齐方式：左对齐
+              overflow: TextOverflow.ellipsis, //省略方式：省略号
+              maxLines: 1,
+              style: TextStyle(
+                  fontSize: 12.0,
+                  color: Color.fromRGBO(255, 255, 255, 0.7),
+                  fontWeight: FontWeight.w700),
+            )),
         SizedBox(width: 10),
         Container(
           margin: EdgeInsets.fromLTRB(0, 0, 10, 0),

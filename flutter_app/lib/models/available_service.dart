@@ -1,7 +1,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 //part 'AvailableService.g.dart';
-part 'availableservice.g.dart';
+part 'available_service.g.dart';
 @JsonSerializable()
 class AvailableService {
   @JsonKey(defaultValue: 0)
