@@ -57,10 +57,11 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
   loadInfo() async{
     CardSevice cardCP= CardSevice.cardData;
     await cardCP.receiveInfo().then((value) => listOfStar.receiveInfo(value));
-    setState((){
+    if (mounted) {
+      setState((){
 
-    });
-
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -76,9 +77,9 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
           bigCard(),
           staffPick(),
           gridView(6),
-          Live(),
+          live(),
           gridView(4),
-          News(),
+          news(),
           gridView(2),
           advisorButton(context)
         ])
@@ -126,7 +127,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     );
   }
 
-  Container News() {
+  Container news() {
     return Container(
       height: 45,
       alignment: Alignment.bottomCenter,
@@ -145,7 +146,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     );
   }
 
-  Container Live() {
+  Container live() {
     return Container(
       height: 45,
       alignment: Alignment.bottomCenter,
