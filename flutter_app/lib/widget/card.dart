@@ -70,7 +70,6 @@ class _CardInitialState extends State<CardInitial> {
         );
   }
 
-
   Container serve() {
     return Container(
       height: 130,
@@ -97,7 +96,6 @@ class _CardInitialState extends State<CardInitial> {
       ]),
     );
   }
-
 
   Container starName(String name) {
     return Container(
@@ -147,7 +145,6 @@ class _CardInitialState extends State<CardInitial> {
     );
   }
 
-
   Container starBio(String bio) {
     return Container(
       height: 15,
@@ -185,26 +182,35 @@ class _CardInitialState extends State<CardInitial> {
     return Center(
       child: Container(
         margin: EdgeInsets.fromLTRB(0, 11, 10, 20),
-        child: Column(children: [
-          Image.asset('images/24h.png',
-              width: 20.0, height: 20.0, fit: BoxFit.cover),
-          SizedBox(
-            height: 4,
-          ),
-          Image.asset('images/11.png',
-              width: 20.0, height: 20.0, fit: BoxFit.cover),
-          SizedBox(
-            height: 4,
-          ),
-          Image.asset('images/12.png',
-              width: 20.0, height: 20.0, fit: BoxFit.cover),
-          SizedBox(
-            height: 4,
-          ),
-          Image.asset('images/15.png',
-              width: 20.0, height: 20.0, fit: BoxFit.cover),
+        child: Column(
+            children: [
+          serviceAttain('images/24h.png','24h'),
+              serviceAttain('images/11.png','text'),
+              serviceAttain('images/12.png','audio'),
+              serviceAttain('images/15.png','video'),
         ]),
       ),
     );
+  }
+
+  bool serviceType(String Type){
+    for(int i=0;i<widget.star.availableService.length;i++){
+      if(widget.star.availableService[i].type <= 3 && Type == '24h') return true;
+      else if(widget.star.availableService[i].type == 4 && Type == 'text') return true;
+      else if(widget.star.availableService[i].type == 5 && Type == 'audio') return true;
+      else if(widget.star.availableService[i].type == 6 && Type == 'video') return true;
+    }
+    return false;
+  }
+
+  Widget serviceAttain(String imageAsset,String serveType) {
+    if(serviceType(serveType))
+    return Container(
+          height: 23,
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 3),
+          child: Image.asset(imageAsset,
+              width: 20.0, height: 20.0, fit: BoxFit.cover),
+        );
+    else return SizedBox(height: 1);
   }
 }

@@ -6,8 +6,27 @@ import 'card_sevice.dart';
 class BigCard extends StatelessWidget {
   final Star star;
   BigCard({this.star});
-  
 
+  bool serviceType(String Type){
+    for(int i=0;i<star.availableService.length;i++){
+      if(star.availableService[i].type <= 3 && Type == '24h') return true;
+      else if(star.availableService[i].type == 4 && Type == 'text') return true;
+      else if(star.availableService[i].type == 5 && Type == 'audio') return true;
+      else if(star.availableService[i].type == 6 && Type == 'video') return true;
+    }
+    return false;
+  }
+
+  Widget serviceAttain(String imageAsset,String serveType) {
+    if(serviceType(serveType))
+      return Container(
+        width: 30,
+        padding: EdgeInsets.fromLTRB(0, 0, 6, 0),
+        child: Image.asset(imageAsset,
+            width: 24.0, height: 24.0, fit: BoxFit.cover),
+      );
+    else return SizedBox(width: 1);
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -29,17 +48,10 @@ class BigCard extends StatelessWidget {
               child: Row(
                 children: [
                   SizedBox(width: 200),
-                  Image.asset('images/24h.png',
-                      width: 24.0, height: 24.0, fit: BoxFit.cover),
-                  SizedBox(width: 6),
-                  Image.asset('images/11.png',
-                      width: 24.0, height: 24.0, fit: BoxFit.cover),
-                  SizedBox(width: 6),
-                  Image.asset('images/12.png',
-                      width: 24.0, height: 24.0, fit: BoxFit.cover),
-                  SizedBox(width: 6),
-                  Image.asset('images/15.png',
-                      width: 24.0, height: 24.0, fit: BoxFit.cover),
+                  serviceAttain('images/24h.png','24h'),
+                  serviceAttain('images/11.png','text'),
+                  serviceAttain('images/12.png','audio'),
+                  serviceAttain('images/15.png','video'),
                 ],
               ),
             ),

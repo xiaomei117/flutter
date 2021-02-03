@@ -216,9 +216,9 @@ class _StarsInfoState extends State<StarsInfo> {
 
 
   Future _upDataName() async {
-    List<Star> newStarList = new List<Star>();
-    int i=newStarList.indexOf(widget.star);
+    List<Star> newStarList = [];
     newStarList=ListStarInfo.listOfStar;
+    int i=newStarList.indexOf(widget.star);
     newStarList.remove(widget.star);
     widget.star.name=this.currentStr;
     newStarList.insert(i, widget.star);

@@ -81,7 +81,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
   Widget bigCard() {
     Star starOfBigCard = new Star();
     if (ListStarInfo.listOfStar.isNotEmpty) {
-      starOfBigCard = ListStarInfo.listOfStar[1];
+      starOfBigCard = ListStarInfo.listOfStar[2];
       return BigCard(star: starOfBigCard);
     } else
       return Text('');
