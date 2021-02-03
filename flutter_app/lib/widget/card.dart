@@ -164,17 +164,23 @@ class _CardInitialState extends State<CardInitial> {
                   fontWeight: FontWeight.w700),
             )),
         SizedBox(width: 10),
-        Container(
-          margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-          height: 12.0,
-          width: 12.0,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.all(Radius.circular(30.0))),
-        )
+        isLive()
       ]),
     );
+  }
+
+  Widget isLive() {
+    if(widget.star.liveStatus == 1)
+    return Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+        height: 12.0,
+        width: 12.0,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.all(Radius.circular(30.0))),
+      );
+    else return Text('');
   }
 
 //第一行右边column组件合集
