@@ -30,14 +30,8 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
   void initState() {
     super.initState();
     //监听登录事件
-<<<<<<< HEAD
     _subscription =
         eventBus.on<EventParam>().listen((EventParam data) => update());
-=======
-    _subscription = eventBus.on<EventParam>().listen((EventParam data) =>
-        update()
-    );
->>>>>>> 102ef5dd3f8528e08b88d65ea17678345aa626eb
     _subscription.resume();
     loadInfo();
     initPre();
@@ -60,17 +54,9 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
   loadInfo() async {
     CardSevice cardCP = CardSevice.cardData;
     await cardCP.receiveInfo().then((value) => listOfStar.receiveInfo(value));
-<<<<<<< HEAD
     setState(() {
       listOfStar.buildList();
     });
-=======
-    if (mounted) {
-      setState((){
-
-      });
-    }
->>>>>>> 102ef5dd3f8528e08b88d65ea17678345aa626eb
   }
 
   @override
@@ -78,8 +64,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     // TODO: implement build
     return Center(
         child: ListView(children: [
-<<<<<<< HEAD
-      firstRow(),
+          firstRow(),
       secondRow(),
       thirdRow(),
       forthCard(),
@@ -90,23 +75,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
       news(),
       advisorButton(context)
     ]));
-=======
-          firstRow(),
-          secondRow(),
-          thirdRow(),
-          forthCard(),
-          RowStars(),
-          bigCard(),
-          staffPick(),
-          gridView(6),
-          live(),
-          gridView(4),
-          news(),
-          gridView(2),
-          advisorButton(context)
-        ])
-    );
->>>>>>> 102ef5dd3f8528e08b88d65ea17678345aa626eb
+
   }
 
   Widget bigCard() {
@@ -150,51 +119,8 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     );
   }
 
-<<<<<<< HEAD
   Widget gridView(List list) {
-    if (ListStarInfo.listOfStar.isEmpty && list.length < 2) {
-=======
-  Container news() {
-    return Container(
-      height: 45,
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        children: [
-          SizedBox(width: 18),
-          Image.asset('images/newTag.png'),
-          SizedBox(width: 8),
-          Text('New',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Color.fromRGBO(255, 87, 55, 1),
-              )),
-        ],
-      ),
-    );
-  }
-
-  Container live() {
-    return Container(
-      height: 45,
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        children: [
-          SizedBox(width: 18),
-          Image.asset('images/homeLiveIcon.png'),
-          SizedBox(width: 8),
-          Text('Live',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Color.fromRGBO(75, 160, 255, 1),
-              )),
-        ],
-      ),
-    );
-  }
-
-  Widget gridView(int str) {
     if(ListStarInfo.listOfStar.isEmpty) {
->>>>>>> 102ef5dd3f8528e08b88d65ea17678345aa626eb
       return Text('');
     } else {
       if (list.length % 2 == 1) list.removeAt(list.length - 1);
