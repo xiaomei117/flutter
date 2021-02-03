@@ -16,7 +16,6 @@ import 'models/star.dart';
 import 'widget/card.dart';
 
 class ImageAndIconRoute extends StatefulWidget {
-  
   @override
   _ImageAndIconRouteState createState() {
     return _ImageAndIconRouteState();
@@ -25,83 +24,77 @@ class ImageAndIconRoute extends StatefulWidget {
 
 class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
   StreamSubscription _subscription;
-  ListStarInfo listOfStar=ListStarInfo.starData;
+  ListStarInfo listOfStar = ListStarInfo.starData;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //监听登录事件
-    _subscription=eventBus.on<EventParam>().listen((EventParam data) =>
-        update()
-    );
+    _subscription =
+        eventBus.on<EventParam>().listen((EventParam data) => update());
     _subscription.resume();
     loadInfo();
     initPre();
   }
 
-  void update(){
-    setState((){
-
-    });
+  void update() {
+    setState(() {});
   }
 
-  void dispose(){
+  void dispose() {
     _subscription.cancel();
     super.dispose();
   }
-  initPre() async{
+
+  initPre() async {
     SharePreference starID = SharePreference.starPer;
     await starID.readList().then((value) => SharePreference.listID);
   }
 
-  loadInfo() async{
-    CardSevice cardCP= CardSevice.cardData;
+  loadInfo() async {
+    CardSevice cardCP = CardSevice.cardData;
     await cardCP.receiveInfo().then((value) => listOfStar.receiveInfo(value));
-    setState((){
-
+    setState(() {
+      listOfStar.buildList();
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
-
     // TODO: implement build
     return Center(
         child: ListView(children: [
-          firstRow(),
-          secondRow(),
-          thirdRow(),
-          forthCard(),
-          RowStars(),
-          bigCard(),
-          staffPick(),
-          gridView(6),
-          Live(),
-          gridView(4),
-          News(),
-          gridView(2),
-          advisorButton(context)
-        ])
-    );
+      firstRow(),
+      secondRow(),
+      thirdRow(),
+      forthCard(),
+      RowStars(),
+      bigCard(),
+      staffPick(),
+      live(),
+      news(),
+      advisorButton(context)
+    ]));
   }
 
   Widget bigCard() {
     Star starOfBigCard = new Star();
-    if(ListStarInfo.listOfStar.isNotEmpty) {
+    if (ListStarInfo.listOfStar.isNotEmpty) {
       starOfBigCard = ListStarInfo.listOfStar[1];
       return BigCard(star: starOfBigCard);
-    }
-    else return Text('');
+    } else
+      return Text('');
   }
 
   Widget advisorButton(BuildContext context) {
     return RaisedButton(
       color: Colors.white,
       onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => new SecondScreen()),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => new SecondScreen()),
+        );
       },
       child: Container(
         margin: EdgeInsets.fromLTRB(106, 23, 100, 19),
@@ -126,93 +119,105 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     );
   }
 
-  Container News() {
-    return Container(
-      height: 45,
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        children: [
-          SizedBox(width: 18),
-          Image.asset('images/newTag.png'),
-          SizedBox(width: 8),
-          Text('New',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Color.fromRGBO(255, 87, 55, 1),
-              )),
-        ],
-      ),
-    );
-  }
-
-  Container Live() {
-    return Container(
-      height: 45,
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        children: [
-          SizedBox(width: 18),
-          Image.asset('images/homeLiveIcon.png'),
-          SizedBox(width: 8),
-          Text('Live',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Color.fromRGBO(75, 160, 255, 1),
-              )),
-        ],
-      ),
-    );
-  }
-
-  Widget gridView(int str) {
-    if(ListStarInfo.listOfStar.isEmpty) {
+  Widget gridView(List list) {
+    if (ListStarInfo.listOfStar.isEmpty && list.length < 2) {
       return Text('');
-    }
-    else {
+    } else {
+      if (list.length % 2 == 1) list.removeAt(list.length - 1);
       return GridView.builder(
           physics: NeverScrollableScrollPhysics(),
-          itemCount: str,
+          itemCount: list.length,
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
               crossAxisCount: 2,
-              childAspectRatio: 0.84
-          ),
+              childAspectRatio: 0.8),
           padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
-          itemBuilder: (context,index) {
-            Star star = ListStarInfo.listOfStar[index];
+          itemBuilder: (context, index) {
+            Star star = list[index];
             return CardInitial(star: star);
-          }
-      );
+          });
     }
   }
 
-  Container staffPick() {
-    return Container(
-      height: 45,
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        children: [
-          SizedBox(width: 18),
-          Image.asset('images/staffPickIcon.png'),
-          SizedBox(width: 8),
-          Text('Staff Pick',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Color.fromRGBO(120, 126, 219, 1),
-              )),
-        ],
-      ),
+  Widget news() {
+    return Column(
+      children: [
+        Container(
+          height: 45,
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            children: [
+              SizedBox(width: 18),
+              Image.asset('images/newTag.png'),
+              SizedBox(width: 8),
+              Text('New',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Color.fromRGBO(255, 87, 55, 1),
+                  )),
+            ],
+          ),
+        ),
+        gridView(ListStarInfo.newList),
+      ],
+    );
+  }
+
+  Widget live() {
+    return Column(
+      children: [
+        Container(
+          height: 45,
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            children: [
+              SizedBox(width: 18),
+              Image.asset('images/homeLiveIcon.png'),
+              SizedBox(width: 8),
+              Text('Live',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Color.fromRGBO(75, 160, 255, 1),
+                  )),
+            ],
+          ),
+        ),
+        gridView(ListStarInfo.liveList),
+      ],
+    );
+  }
+
+  Widget staffPick() {
+    return Column(
+      children: [
+        Container(
+          height: 45,
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            children: [
+              SizedBox(width: 18),
+              Image.asset('images/staffPickIcon.png'),
+              SizedBox(width: 8),
+              Text('Staff Pick',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Color.fromRGBO(120, 126, 219, 1),
+                  )),
+            ],
+          ),
+        ),
+        gridView(ListStarInfo.pickList),
+      ],
     );
   }
 
 //这是神婆小卡片
   Widget forthCard() {
-    if(ListStarInfo.listOfStar.isEmpty) {
+    if (ListStarInfo.listOfStar.isEmpty) {
       return Text('');
-    }
-    else {
+    } else {
       return Container(
         height: 220,
         child: ListView.builder(
@@ -221,8 +226,8 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
             padding: EdgeInsets.fromLTRB(17, 0, 0, 0),
             itemBuilder: (context, index) {
               Star star = ListStarInfo.listOfStar[index];
-              return CardInitial(star: star);}
-        ),
+              return CardInitial(star: star);
+            }),
       );
     }
   }
@@ -249,16 +254,15 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
           SizedBox(width: 5),
           IconButton(
               iconSize: 14,
-              icon: Icon(Icons.arrow_forward_ios,color: Color.fromRGBO(94, 22,172, 0.98)),
+              icon: Icon(Icons.arrow_forward_ios,
+                  color: Color.fromRGBO(94, 22, 172, 0.98)),
               alignment: Alignment.centerLeft,
-              onPressed: ()
-              {
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => new SecondScreen()),
                 );
-              }
-          )
+              })
         ],
       ),
     );
@@ -274,7 +278,7 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
             Container(
                 height: 33,
                 decoration:
-                BoxDecoration(color: Color.fromRGBO(62, 33, 55, 0.7)),
+                    BoxDecoration(color: Color.fromRGBO(62, 33, 55, 0.7)),
                 child: Row(
                   children: [
                     SizedBox(width: 13),

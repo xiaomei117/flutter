@@ -33,7 +33,7 @@ class Star {
   @JsonKey(defaultValue: 0)
   int workStatus;
   @JsonKey(defaultValue: 0.0)
-  double firstApprovedAt;
+  int firstApprovedAt;
   @JsonKey(defaultValue: '')
   String featureCover;
 

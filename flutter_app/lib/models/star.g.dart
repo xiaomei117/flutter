@@ -26,7 +26,7 @@ Star _$StarFromJson(Map<String, dynamic> json) {
     rate: (json['rate'] as num)?.toDouble(),
     liveStatus: (json['liveStatus'] as num)?.toInt(),
     workStatus: (json['workStatus'] as num)?.toInt(),
-    firstApprovedAt: (json['firstApprovedAt'] as num)?.toDouble(),
+    firstApprovedAt: (json['firstApprovedAt'] as num)?.toInt(),
     featureCover: json['featureCover'] as String,
   );
 }

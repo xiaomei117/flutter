@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/star.dart';
 import 'package:flutter_app/widget/card_sevice.dart';
@@ -32,13 +32,16 @@ class _CardInitialState extends State<CardInitial> {
         height: 210,
         width: 150.0,
         child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          //第一行组件
-          buildContainer1(),
-          //第二行组件
-          buildContainer2(widget.star.name),
-          //第三行组件
-          buildContainer3(widget.star.bio)
+            Column(children: [
+              SizedBox(height: 5),
+
+          serve(),
+
+          registerTime(),
+
+          starName(widget.star.name),
+    
+          starBio(widget.star.bio)
         ]),
         decoration: ShapeDecoration(
           //设置背景图片
@@ -52,17 +55,31 @@ class _CardInitialState extends State<CardInitial> {
     );
   }
 
-//卡片第一行
-  Container buildContainer1() {
+  Container registerTime() {
+    var strTime =widget.star.firstApprovedAt;
+    var regTime = DateTime.fromMillisecondsSinceEpoch(strTime);
+    var formatTime = formatDate(regTime,[MM,' ',dd,',',yyyy,' ',HH,':',nn,':',ss]);
     return Container(
-      height: 140,
+          height: 15,
+          color: Colors.grey,
+          child: Text(formatTime.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10
+          ))
+        );
+  }
+
+
+  Container serve() {
+    return Container(
+      height: 130,
       child: Row(children: [
         //第一行左边文字加纯色背景
         Expanded(
           child: Container(
-            height: 21,
             alignment: Alignment.center,
-            margin: EdgeInsets.fromLTRB(6, 0, 40, 120),
+            margin: EdgeInsets.fromLTRB(6, 0, 40, 110),
             decoration: BoxDecoration(
                 color: Color.fromRGBO(255, 238, 85, 1),
                 borderRadius: BorderRadius.all(Radius.circular(2.0))),
@@ -81,15 +98,15 @@ class _CardInitialState extends State<CardInitial> {
     );
   }
 
-//卡片第二行
-  Container buildContainer2(String name) {
+
+  Container starName(String name) {
     return Container(
-      height: 15,
+      height: 25,
       child: Row(children: [
         SizedBox(width: 10),
         //第二行左边，纯文字
         Container(
-          height: 13,
+          height: 20,
           width: 95,
           alignment: Alignment.topCenter,
           child: Text(
@@ -130,8 +147,8 @@ class _CardInitialState extends State<CardInitial> {
     );
   }
 
-//卡片第三行
-  Container buildContainer3(String bio) {
+
+  Container starBio(String bio) {
     return Container(
       height: 15,
       child: Row(children: [
