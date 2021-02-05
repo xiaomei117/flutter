@@ -46,14 +46,18 @@ class _RowStarsState extends State<RowStars> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Star currentStar = searchStar(SharePreference.listID[len - 1 - index]);
+                    Star currentStar =
+                        searchStar(SharePreference.listID[len - 1 - index]);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => new StarsInfo(star: currentStar)
-                           ),
+                          builder: (context) =>
+                              new StarsInfo(star: currentStar)),
                     );
-                     starID.writeList('RecentViewed',searchStar(SharePreference.listID[len - 1 - index]).userId);
+                    starID.writeList(
+                        'RecentViewed',
+                        searchStar(SharePreference.listID[len - 1 - index])
+                            .userId);
                   },
                   child: showStar(len, index),
                 );
@@ -66,31 +70,28 @@ class _RowStarsState extends State<RowStars> {
 
   Column showStar(int len, int index) {
     return Column(
-                  children: [
-                    Container(
-                      height: 70,
-                      width: 70,
-                      decoration: ShapeDecoration(
-                        image: new DecorationImage(
-                            //设置背景图片
-                            image: NetworkImage(searchStar(
-                                    SharePreference.listID[len - 1 - index])
-                                .avatar),
-                            fit: BoxFit.cover),
-                        //设置圆角
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadiusDirectional.circular(100)),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Container(
-                        width: 70,
-                        child: Text(
-                            searchStar(SharePreference.listID[len - 1 - index])
-                                .name,
-                            overflow: TextOverflow.ellipsis))
-                  ],
-                );
+      children: [
+        Container(
+          height: 70,
+          width: 70,
+          decoration: ShapeDecoration(
+            image: new DecorationImage(
+                //设置背景图片
+                image: NetworkImage(
+                    searchStar(SharePreference.listID[len - 1 - index]).avatar),
+                fit: BoxFit.cover),
+            //设置圆角
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusDirectional.circular(100)),
+          ),
+        ),
+        SizedBox(height: 4),
+        Container(
+            width: 70,
+            child: Text(
+                searchStar(SharePreference.listID[len - 1 - index]).name,
+                overflow: TextOverflow.ellipsis))
+      ],
+    );
   }
 }

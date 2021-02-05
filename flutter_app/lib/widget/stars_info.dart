@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/models/star.dart';
 import 'package:flutter_app/widget/strings.dart';
-import '../ImageAndIconRoute.dart';
-import 'card_sevice.dart';
 import 'event_bus.dart';
 import 'file_io.dart';
-import 'package:event_bus/event_bus.dart';
 
 import 'list_starinfo.dart';
 class StarsInfo extends StatefulWidget {
@@ -20,9 +17,10 @@ class StarsInfo extends StatefulWidget {
 class _StarsInfoState extends State<StarsInfo> {
   TextEditingController name=TextEditingController();
   String currentStr='';//用户修改的神婆名字
-  
+
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
         appBar: new AppBar(
           backgroundColor: Colors.white,

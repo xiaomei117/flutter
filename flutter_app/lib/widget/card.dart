@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/star.dart';
-import 'package:flutter_app/widget/card_sevice.dart';
 import 'package:flutter_app/widget/share_preference_url.dart';
 import 'package:flutter_app/widget/stars_info.dart';
 

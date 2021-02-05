@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widget/card.dart';
 import 'package:flutter_app/widget/list_starinfo.dart';
-import 'package:flutter_app/widget/recent_star.dart';
-import 'package:flutter_app/widget/sticky_tabbar_delegate.dart';
 
 import 'models/star.dart';
 

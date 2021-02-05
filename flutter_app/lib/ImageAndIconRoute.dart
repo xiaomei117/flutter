@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widget/big_card.dart';
@@ -9,10 +8,7 @@ import 'package:flutter_app/widget/event_bus.dart';
 import 'package:flutter_app/widget/get_sticky_tab.dart';
 import 'package:flutter_app/widget/list_starinfo.dart';
 import 'package:flutter_app/widget/recent_star.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter_app/widget/share_preference_url.dart';
-import 'package:flutter_app/widget/stars_info.dart';
-import 'package:flutter_app/widget/sticky_tabbar_delegate.dart';
 import 'SecondScreen.dart';
 import 'models/star.dart';
 import 'widget/card.dart';
@@ -62,7 +58,6 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -70,28 +65,30 @@ class _ImageAndIconRouteState extends State<ImageAndIconRoute> {
       firstRow(),
       secondRow(),
       StickyHeader(
-        header: GetTab().getStickyTab('Best Match',Row(
-          children: [
-            SizedBox(width: 70),
-            Text('Find New Match',
-                style: TextStyle(
-                    fontSize: 14.0,
-                    color: Color.fromARGB(255, 83, 19, 152))),
-            SizedBox(width: 5),
-            IconButton(
-                iconSize: 14,
-                icon: Icon(Icons.arrow_forward_ios,
-                    color: Color.fromRGBO(94, 22, 172, 0.98)),
-                alignment: Alignment.centerLeft,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => new SecondScreen()),
-                  );
-                })
-          ],
-        )),
+        header: GetTab().getStickyTab(
+            'Best Match',
+            Row(
+              children: [
+                SizedBox(width: 70),
+                Text('Find New Match',
+                    style: TextStyle(
+                        fontSize: 14.0,
+                        color: Color.fromARGB(255, 83, 19, 152))),
+                SizedBox(width: 5),
+                IconButton(
+                    iconSize: 14,
+                    icon: Icon(Icons.arrow_forward_ios,
+                        color: Color.fromRGBO(94, 22, 172, 0.98)),
+                    alignment: Alignment.centerLeft,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => new SecondScreen()),
+                      );
+                    })
+              ],
+            )),
         content: forthCard(),
       ),
       RowStars(),
