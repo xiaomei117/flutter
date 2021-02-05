@@ -46,45 +46,51 @@ class _RowStarsState extends State<RowStars> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    starID.writeList('RecentViewed',searchStar(SharePreference.listID[len - 1 - index]).userId);
+                    Star currentStar = searchStar(SharePreference.listID[len - 1 - index]);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => new StarsInfo(star: searchStar(SharePreference.listID[index]))),
+                          builder: (context) => new StarsInfo(star: currentStar)
+                           ),
                     );
+                     starID.writeList('RecentViewed',searchStar(SharePreference.listID[len - 1 - index]).userId);
                   },
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 70,
-                        width: 70,
-                        decoration: ShapeDecoration(
-                          image: new DecorationImage(
-                              //设置背景图片
-                              image: NetworkImage(searchStar(
-                                      SharePreference.listID[len - 1 - index])
-                                  .avatar),
-                              fit: BoxFit.cover),
-                          //设置圆角
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadiusDirectional.circular(100)),
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Container(
-                          width: 70,
-                          child: Text(
-                              searchStar(SharePreference.listID[len - 1 - index])
-                                  .name,
-                              overflow: TextOverflow.ellipsis))
-                    ],
-                  ),
+                  child: showStar(len, index),
                 );
               }),
         ),
       );
     } else
       return Text('');
+  }
+
+  Column showStar(int len, int index) {
+    return Column(
+                  children: [
+                    Container(
+                      height: 70,
+                      width: 70,
+                      decoration: ShapeDecoration(
+                        image: new DecorationImage(
+                            //设置背景图片
+                            image: NetworkImage(searchStar(
+                                    SharePreference.listID[len - 1 - index])
+                                .avatar),
+                            fit: BoxFit.cover),
+                        //设置圆角
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadiusDirectional.circular(100)),
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Container(
+                        width: 70,
+                        child: Text(
+                            searchStar(SharePreference.listID[len - 1 - index])
+                                .name,
+                            overflow: TextOverflow.ellipsis))
+                  ],
+                );
   }
 }
